@@ -12,11 +12,12 @@ class Cutter:
         self.pieces.append(Piece(piece_set[0:self.MIN_PIECE_LEN]))
         start = self.MIN_PIECE_LEN
         end = self.MAX_PIECE_LEN
-        while start <= len(piece_set):
-            if end <= len(piece_set) - self.MIN_PIECE_LEN:
+        while start < len(piece_set):
+            if start < len(piece_set) - self.MIN_PIECE_LEN - 2:
                 new_num = piece_set[start]
-                if getattr(self.pieces[-1], "check_new_nums")([new_num]):
-                    getattr(self.pieces[-1], "extends_nums")([new_num])
+                new_nums = piece_set[start:start + 3]
+                if getattr(self.pieces[-1], "check_new_nums")(new_num, new_nums):
+                    getattr(self.pieces[-1], "append_to_nums")(new_num)
                     start += 1
                     if start == end:
                         self.pieces.append(Piece(piece_set[start:start + self.MIN_PIECE_LEN]))
@@ -27,7 +28,7 @@ class Cutter:
                     start += self.MIN_PIECE_LEN
                     end = start + 2
             else:
-                getattr(self.pieces[-1], "extends_nums")(piece_set[start:])
+                self.pieces.append(Piece(piece_set[start:]))
                 break
 
     def get_total_level(self):
@@ -50,15 +51,19 @@ class Piece:
         self.piece_type = self.check_type(nums)
         self.nums = nums
 
-    def extends_nums(self, new_nums):
-        self.nums.extend(new_nums)
+    def append_to_nums(self, new_nums):
+        if type(new_nums) == list:
+            self.nums.extend(new_nums)
+        else:
+            self.nums.append(new_nums)
 
-    def check_new_nums(self, new_nums):
+    def check_new_nums(self, new_num, new_nums):
         temp_nums = self.nums.copy()
-        temp_nums.extend(new_nums)
-        new_type = self.check_type(temp_nums)
+        temp_nums.append(new_num)
+        joined_type = self.check_type(temp_nums)
+        new_type = self.check_type(new_nums)
 
-        if new_type == self.piece_type:
+        if joined_type == self.piece_type and joined_type.value <= new_type.value:
             return True
         else:
             return False
@@ -73,8 +78,10 @@ class Piece:
         num_diff = 0
 
         if second_num - first_num == 1:
+            check_list[3] = False
             seq_diff = 1
         elif second_num - first_num == -1:
+            check_list[3] = False
             seq_diff = -1
         else:
             check_list[1] = False
@@ -87,7 +94,7 @@ class Piece:
                 check_list[1] = False
             if not ((i % 2 == 0 and nums[i] == first_num) or (i % 2 == 1 and nums[i] == second_num)):
                 check_list[2] = False
-            if not check_list[1] and i != len(nums) - 1 and nums[i + 1] - nums[i] != num_diff:
+            if check_list[3] and i != len(nums) - 1 and nums[i + 1] - nums[i] != num_diff:
                 check_list[3] = False
 
         switcher = {
