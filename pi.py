@@ -1,44 +1,63 @@
 from enum import Enum
 
 
-class Cutter:
+class PieceManager:
     MIN_PIECE_LEN = 3
     MAX_PIECE_LEN = 5
 
     def __init__(self):
-        self.pieces = []
+        self.piece_level_dict_by_num_seq_str = {}
 
-    def cut(self, piece_set):
-        self.pieces.append(Piece(piece_set[0:self.MIN_PIECE_LEN]))
-        start = self.MIN_PIECE_LEN
-        end = self.MAX_PIECE_LEN
-        while start < len(piece_set):
-            if start < len(piece_set) - self.MIN_PIECE_LEN - 2:
-                new_num = piece_set[start]
-                new_nums = piece_set[start:start + 3]
-                if getattr(self.pieces[-1], "check_new_nums")(new_num, new_nums):
-                    getattr(self.pieces[-1], "append_to_nums")(new_num)
-                    start += 1
-                    if start == end:
-                        self.pieces.append(Piece(piece_set[start:start + self.MIN_PIECE_LEN]))
-                        start += self.MIN_PIECE_LEN
-                        end = start + 2
-                else:
-                    self.pieces.append(Piece(piece_set[start:start + self.MIN_PIECE_LEN]))
-                    start += self.MIN_PIECE_LEN
-                    end = start + 2
-            else:
-                self.pieces.append(Piece(piece_set[start:]))
-                break
+    @staticmethod
+    def num_seq_str_to_num_seq(num_seq_str):
+        return list(map(int, num_seq_str))
 
-    def get_total_level(self):
-        total_level = 0
-        for i in self.pieces:
-            total_level += getattr(i, "piece_type").value
-        return total_level
+    @staticmethod
+    def num_seq_to_num_seq_str(num_seq):
+        return ''.join(map(str, num_seq))
+
+    def register_piece_level_by_num(self, num_seq_str):
+        num_seq = self.num_seq_str_to_num_seq(num_seq_str)
+        l = len(num_seq)
+
+        if l > PieceManager.MIN_PIECE_LEN:
+            min_bound_level = self.get_piece_level_by_num_seq_str(self.num_seq_to_num_seq_str(num_seq[:l - 1]))
+            tail_level = self.get_piece_level_by_num_seq_str(
+                self.num_seq_to_num_seq_str(num_seq[l - PieceManager.MIN_PIECE_LEN:])
+            )
+            min_bound_level = max(min_bound_level, tail_level)
+        else:
+            min_bound_level = Piece(num_seq).level.value
+
+        self.piece_level_dict_by_num_seq_str[num_seq_str] = min_bound_level
+
+    def get_piece_level_by_num_seq_str(self, num_seq_str):
+        if num_seq_str not in self.piece_level_dict_by_num_seq_str:
+            self.register_piece_level_by_num(num_seq_str)
+
+        return self.piece_level_dict_by_num_seq_str[num_seq_str]
+
+    def get_min_level(self, num_seq_str):
+        num_seq = self.num_seq_str_to_num_seq(num_seq_str)
+        l = len(num_seq)
+        min_level = 0
+        start = PieceManager.MIN_PIECE_LEN
+        end = min(l, PieceManager.MAX_PIECE_LEN) + 1
+
+        for piece_len in range(start, end):
+            remain_len = l - piece_len
+            if 0 < remain_len < PieceManager.MIN_PIECE_LEN:
+                continue
+            new_level = self.get_piece_level_by_num_seq_str(self.num_seq_to_num_seq_str(num_seq[:piece_len]))
+            if remain_len > 0:
+                new_level += self.get_min_level(self.num_seq_to_num_seq_str(num_seq[piece_len:]))
+            if min_level == 0 or new_level < min_level:
+                min_level = new_level
+
+        return min_level
 
 
-class PieceType(Enum):
+class PieceLevel(Enum):
     repeated_nums = 1
     sequential = 2
     zigzag = 4
@@ -47,33 +66,15 @@ class PieceType(Enum):
 
 
 class Piece:
-    def __init__(self, nums=[]):
-        self.piece_type = self.check_type(nums)
+    def __init__(self, nums):
         self.nums = nums
+        self.level = self.check_level()
 
-    def append_to_nums(self, new_nums):
-        if type(new_nums) == list:
-            self.nums.extend(new_nums)
-        else:
-            self.nums.append(new_nums)
-
-    def check_new_nums(self, new_num, new_nums):
-        temp_nums = self.nums.copy()
-        temp_nums.append(new_num)
-        joined_type = self.check_type(temp_nums)
-        new_type = self.check_type(new_nums)
-
-        if joined_type == self.piece_type and joined_type.value <= new_type.value:
-            return True
-        else:
-            return False
-
-    @staticmethod
-    def check_type(nums):
+    def check_level(self):
         check_list = [True] * 5
 
-        first_num = nums[0]
-        second_num = nums[1]
+        first_num = self.nums[0]
+        second_num = self.nums[1]
         seq_diff = 0
         num_diff = 0
 
@@ -85,43 +86,45 @@ class Piece:
             seq_diff = -1
         else:
             check_list[1] = False
-            num_diff = nums[1] - nums[0]
+            num_diff = self.nums[1] - self.nums[0]
 
-        for i in range(1, len(nums)):
-            if nums[i] != first_num:
+        for i in range(1, len(self.nums)):
+            if self.nums[i] != first_num:
                 check_list[0] = False
-            if i != len(nums) - 1 and nums[i + 1] - nums[i] != seq_diff:
+            if i != len(self.nums) - 1 and self.nums[i + 1] - self.nums[i] != seq_diff:
                 check_list[1] = False
-            if not ((i % 2 == 0 and nums[i] == first_num) or (i % 2 == 1 and nums[i] == second_num)):
+            if not ((i % 2 == 0 and self.nums[i] == first_num) or (i % 2 == 1 and self.nums[i] == second_num)):
                 check_list[2] = False
-            if check_list[3] and i != len(nums) - 1 and nums[i + 1] - nums[i] != num_diff:
+            if check_list[3] and i != len(self.nums) - 1 and self.nums[i + 1] - self.nums[i] != num_diff:
                 check_list[3] = False
 
         switcher = {
-            0: PieceType.repeated_nums,
-            1: PieceType.sequential,
-            2: PieceType.zigzag,
-            3: PieceType.equal_diff,
-            4: PieceType.other
+            0: PieceLevel.repeated_nums,
+            1: PieceLevel.sequential,
+            2: PieceLevel.zigzag,
+            3: PieceLevel.equal_diff,
+            4: PieceLevel.other
         }
+
         for i in range(len(check_list)):
             if check_list[i]:
                 return switcher.get(i)
 
 
+def input_output(piece_manager):
+    num_seq_str = input()
+    min_level = piece_manager.get_min_level(num_seq_str)
+
+    return min_level
+
+
 def execute(func):
+    piece_manager = PieceManager()
+
     n = int(input())
 
     for i in range(n):
-        print(func())
+        print(func(piece_manager))
 
 
-def temp():
-    piece_set_str = input()
-    piece_set = list(map(int, piece_set_str))
-    cutter = Cutter()
-    cutter.cut(piece_set)
-    return cutter.get_total_level()
-
-
-execute(temp)
+execute(input_output)

@@ -5,4 +5,6 @@ class Piece(object):
         self.aa = aa
 
 
-print(getattr(Piece(), "aa"))
+a = [0, 2, 3]
+b = ''.join(map(str, a))
+print(b)
