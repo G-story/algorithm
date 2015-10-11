@@ -6,7 +6,7 @@ class PieceManager:
     MAX_PIECE_LEN = 5
 
     def __init__(self):
-        self.piece_level_dict_by_num_seq_str = {}
+        self.num_seq_level_dict = {}
 
     @staticmethod
     def num_seq_str_to_num_seq(num_seq_str):
@@ -16,28 +16,19 @@ class PieceManager:
     def num_seq_to_num_seq_str(num_seq):
         return ''.join(map(str, num_seq))
 
-    def register_piece_level_by_num(self, num_seq_str):
-        num_seq = self.num_seq_str_to_num_seq(num_seq_str)
-        l = len(num_seq)
+    def get_piece_level(self, num_seq_str):
+        self.register_num_seq_level(num_seq_str, Piece(self.num_seq_str_to_num_seq(num_seq_str)).level.value)
 
-        if l > PieceManager.MIN_PIECE_LEN:
-            min_bound_level = self.get_piece_level_by_num_seq_str(self.num_seq_to_num_seq_str(num_seq[:l - 1]))
-            tail_level = self.get_piece_level_by_num_seq_str(
-                self.num_seq_to_num_seq_str(num_seq[l - PieceManager.MIN_PIECE_LEN:])
-            )
-            min_bound_level = max(min_bound_level, tail_level)
-        else:
-            min_bound_level = Piece(num_seq).level.value
+        return self.num_seq_level_dict[num_seq_str]
 
-        self.piece_level_dict_by_num_seq_str[num_seq_str] = min_bound_level
-
-    def get_piece_level_by_num_seq_str(self, num_seq_str):
-        if num_seq_str not in self.piece_level_dict_by_num_seq_str:
-            self.register_piece_level_by_num(num_seq_str)
-
-        return self.piece_level_dict_by_num_seq_str[num_seq_str]
+    def register_num_seq_level(self, num_seq_str, level):
+        if num_seq_str not in self.num_seq_level_dict:
+            self.num_seq_level_dict[num_seq_str] = level
 
     def get_min_level(self, num_seq_str):
+        if num_seq_str in self.num_seq_level_dict:
+            return self.num_seq_level_dict[num_seq_str]
+
         num_seq = self.num_seq_str_to_num_seq(num_seq_str)
         l = len(num_seq)
         min_level = 0
@@ -48,11 +39,13 @@ class PieceManager:
             remain_len = l - piece_len
             if 0 < remain_len < PieceManager.MIN_PIECE_LEN:
                 continue
-            new_level = self.get_piece_level_by_num_seq_str(self.num_seq_to_num_seq_str(num_seq[:piece_len]))
+            new_level = self.get_piece_level(self.num_seq_to_num_seq_str(num_seq[:piece_len]))
             if remain_len > 0:
                 new_level += self.get_min_level(self.num_seq_to_num_seq_str(num_seq[piece_len:]))
             if min_level == 0 or new_level < min_level:
                 min_level = new_level
+
+        self.register_num_seq_level(num_seq_str, min_level)
 
         return min_level
 
@@ -95,7 +88,7 @@ class Piece:
                 check_list[1] = False
             if not ((i % 2 == 0 and self.nums[i] == first_num) or (i % 2 == 1 and self.nums[i] == second_num)):
                 check_list[2] = False
-            if check_list[3] and i != len(self.nums) - 1 and self.nums[i + 1] - self.nums[i] != num_diff:
+            if i != len(self.nums) - 1 and self.nums[i + 1] - self.nums[i] != num_diff:
                 check_list[3] = False
 
         switcher = {
