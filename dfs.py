@@ -12,26 +12,3 @@ def dfs(graph, start, stack):
         return stack
     elif len(stack) > 0:
         stack.pop()
-
-
-def word_chain(graph):
-    for key, value in graph.items():
-        result = dfs(graph, key, [])
-        if type(result) is list:
-            return ' '.join(result)
-
-    return "IMPOSSIBLE"
-
-
-gr = {'A': ['B', 'C'],
-      'B': ['A', 'D', 'E'],
-      'C': ['A', 'F'],
-      'D': ['B'],
-      'E': ['B', 'F'],
-      'F': ['C', 'E']}
-print(word_chain(gr))
-
-
-# dfs(graph, 'A)
-# print(dfs(graph, 'A'))
-# print(dfs(graph, 'B'))
