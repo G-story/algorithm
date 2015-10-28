@@ -24,15 +24,20 @@ def word_chain(words):
     for char in string.ascii_lowercase:
         if first_chars.count(char) != last_chars.count(char):
             diff_char_cnt += 1
-            if first_chars.count(char) > 0:
+            if first_chars.count(char) > last_chars.count(char):
                 first_char_of_chain = char
 
+    first_word = ''
     if diff_char_cnt > 2:
         return 'IMPOSSIBLE'
-    elif diff_char_cnt == 0:
-        first_word = words[0]
-    else:
+    elif diff_char_cnt == 1:
         first_word = list(filter(lambda w: w[0] == first_char_of_chain, words))[0]
+    elif diff_char_cnt == 0:
+        recursive_words = list(filter(lambda w: w[0] == w[-1], words))
+        for word in recursive_words:
+            if first_chars.count(word[0]) - len(recursive_words) == 0:
+                return 'IMPOSSIBLE'
+        first_word = words[0]
 
     result = dfs(graph, first_word, [], len(words))
 

@@ -41,7 +41,7 @@ class InputFactory:
     def factory(input_type, cnt=5):
         if input_type is InputFactory.InputType.fixed:
             # return ['dog', 'god', 'dragon', 'need']
-            return ['ab', 'ba', 'bab', 'bsb', 'aca', 'aba', 'bc']
+            return ['ab', 'ba', 'cc']
         elif input_type is InputFactory.InputType.random:
             input_words = []
             for i in range(cnt):
