@@ -1,14 +1,16 @@
-def dfs(graph, start, stack):
-    stack.append(start)
-    adjacency = graph[start].copy()
+def dfs(graph, word, stack, words_cnt):
+    stack.append(word)
 
-    for v in stack:
-        if v in adjacency:
-            adjacency.remove(v)
-    for nxt in adjacency:
-        if nxt not in stack:
-            dfs(graph, nxt, stack)
-    if len(stack) == len(graph.keys()):
+    if word[-1] in graph:
+        adjacency = graph[word[-1]].copy()
+    else:
+        adjacency = {}
+    for next_char in adjacency:
+        words = adjacency[next_char]
+        for word in words:
+            if word not in stack:
+                dfs(graph, word, stack, words_cnt)
+    if len(stack) == words_cnt:
         return stack
     elif len(stack) > 0:
         stack.pop()

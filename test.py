@@ -23,12 +23,12 @@ class TestStringMethods(unittest.TestCase):
 
     def test_word_chain(self):
         result = word_chain(InputFactory.factory(InputFactory.InputType.fixed))
-        self.assertEqual(result, 'accident temple earth')
+        print(result)
 
     def test_word_chain_by_random(self):
-        words = InputFactory.factory(InputFactory.InputType.random, 50)
-        result = word_chain(words)
+        words = InputFactory.factory(InputFactory.InputType.random, 100)
         print(words)
+        result = word_chain(words)
         print(result)
 
 
@@ -40,9 +40,17 @@ class InputFactory:
     @staticmethod
     def factory(input_type, cnt=5):
         if input_type is InputFactory.InputType.fixed:
-            return ['earth', 'accident', 'temple', ]
+            # return ['dog', 'god', 'dragon', 'need']
+            return ['ab', 'ba', 'bab', 'bsb', 'aca', 'aba', 'bc']
         elif input_type is InputFactory.InputType.random:
-            input_words = [''.join([random.choice(string.ascii_lowercase) for i in range(2)]) for j in range(cnt)]
+            input_words = []
+            for i in range(cnt):
+                word = ''
+                while True:
+                    word = ''.join([random.choice(string.ascii_lowercase) for j in range(4)])
+                    if word not in input_words:
+                        break
+                input_words.append(word)
             return input_words
 
 
