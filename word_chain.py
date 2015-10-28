@@ -30,7 +30,7 @@ def word_chain(words):
     first_word = ''
     if diff_char_cnt > 2:
         return 'IMPOSSIBLE'
-    elif diff_char_cnt == 1:
+    elif diff_char_cnt == 2:
         first_word = list(filter(lambda w: w[0] == first_char_of_chain, words))[0]
     elif diff_char_cnt == 0:
         recursive_words = list(filter(lambda w: w[0] == w[-1], words))
@@ -38,6 +38,8 @@ def word_chain(words):
             if first_chars.count(word[0]) - len(recursive_words) == 0:
                 return 'IMPOSSIBLE'
         first_word = words[0]
+    else:
+        return '??'
 
     result = dfs(graph, first_word, [], len(words))
 
