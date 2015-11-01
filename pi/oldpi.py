@@ -47,7 +47,7 @@ class PieceType(Enum):
 
 
 class Piece:
-    def __init__(self, nums=[]):
+    def __init__(self, nums):
         self.piece_type = self.check_type(nums)
         self.nums = nums
 
