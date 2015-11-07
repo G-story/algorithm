@@ -1,5 +1,2 @@
-import sys
-
-a = [1
-    , 2]
-print(sys.prefix)
+a = "hello"
+print(a.find("ello"))
