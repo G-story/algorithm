@@ -1,26 +1,30 @@
-def get_index_of_substring(origin, substring):
-    for i in range(len(origin)):
-        if origin[i] == substring[0]:
-            is_match = True
-            dup_str = origin[i]
-            prefix = ''
-            suffix = ''
-            dup_str2 = ''
-            for j in range(1, len(substring)):
-                dup_str += substring[j]
-                if origin[i + j] != substring[j]:
-                    is_match = False
-                    dup_str_last_idx = len(dup_str) - 1
-                    for k in range(dup_str_last_idx):
-                        prefix += dup_str[k]
-                        suffix = dup_str[dup_str_last_idx - k] + suffix
-                        if prefix == suffix:
-                            dup_str2 = prefix
-                    if len(dup_str2) > 0:
-                        i += len(dup_str) - len(dup_str2) - 1
-                    break
-            if is_match:
-                return i
+def get_partial_match(N):
+    m = len(N)
+    pi = m * [0]
+    begin, matched = 1, 0
+    for i in range(1, m):
+        while matched > 0 and N[i] != N[matched]:
+            matched = pi[matched - 1]
+        if N[i] == N[matched]:
+            matched += 1
+            pi[i] = matched
+    return pi
+
+
+def kmp_search(H, N):
+    n, m = len(H), len(N)
+    ret = []
+    pi = get_partial_match(N)
+    matched = 0
+    for i in range(n):
+        while matched > 0 and H[i] != N[matched]:
+            matched = pi[matched - 1]
+        if H[i] == N[matched]:
+            matched += 1
+            if matched == m:
+                ret.append(i - m + 1)
+                matched = pi[matched - 1]
+    return ret
 
 
 def get_min_dial_cnt(states):
@@ -28,9 +32,9 @@ def get_min_dial_cnt(states):
 
     for i in range(len(states) - 1):
         if i % 2 == 0:
-            min_dial_cnt += get_index_of_substring(states[i + 1] + states[i + 1], states[i])
+            min_dial_cnt += kmp_search(states[i + 1] + states[i + 1], states[i])[0]
         else:
-            min_dial_cnt += get_index_of_substring(states[i] + states[i], states[i + 1])
+            min_dial_cnt += kmp_search(states[i] + states[i], states[i + 1])[0]
 
     return min_dial_cnt
 
@@ -46,6 +50,5 @@ def in_out():
 
 if __name__ == '__main__':
     C = int(input())
-
     for i in range(C):
         in_out()

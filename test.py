@@ -2,9 +2,8 @@ from enum import Enum
 import random
 import string
 import unittest
-import sys
 
-from pi import newpi
+from jaehasafe import jaehasafe
 
 
 class TestStringMethods(unittest.TestCase):
@@ -22,6 +21,12 @@ class TestStringMethods(unittest.TestCase):
         # with self.assertRaises(TypeError):
         #     s.split(2)
 
+    def test_jaehasafe(self):
+        result = jaehasafe.get_min_dial_cnt(InputFactory.factory(InputFactory.InputType.fixed))
+        self.assertEqual(result, 16)
+
+
+"""
     def test_pi(self):
         nums = [
             '141592653589793238462643383279502884197169399375105820974944592307816406286'
@@ -140,8 +145,6 @@ class TestStringMethods(unittest.TestCase):
         res = newpi.execute(len(nums), nums)
         self.assertEqual(res, results)
 
-
-"""
     def test_allergy(self):
         pass
         # result = allergy(["cl", "bom", "dara", "minzy"], [["dara", "minzy"], ["cl", "minzy"], ["cl", "dara"], ["cl"], ["bom", "dara"], ["bom", "minzy"]])
@@ -182,6 +185,8 @@ class TestStringMethods(unittest.TestCase):
         print(words)
         result = word_chain(words)
         print(result)
+
+
 """
 
 
@@ -194,7 +199,9 @@ class InputFactory:
     def factory(input_type, cnt=5):
         if input_type is InputFactory.InputType.fixed:
             # return ['dog', 'god', 'dragon', 'need']
-            return ['ab', 'ba', 'cc']
+            # return ['ab', 'ba', 'cc']
+            # return ['abbab', 'babab', 'ababb', 'bbaba']
+            return ['jaehasafe', 'aehasafej', 'hasafejae', 'afejaehas']
         elif input_type is InputFactory.InputType.random:
             input_words = []
             for i in range(cnt):
