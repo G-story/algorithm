@@ -8,9 +8,10 @@ def in_out():
     W = int(inp[1])
     a, b, d = [], [], []
     for i in range(W):
-        a.append(int(input()))
-        b.append(int(input()))
-        d.append(int(input()))
+        inp = input().split()
+        a.append(int(inp[0]))
+        b.append(int(inp[1]))
+        d.append(int(inp[2]))
     result = get_max_past_and_future(a, b, d)
     print(result)
 
