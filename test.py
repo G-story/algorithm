@@ -1,9 +1,11 @@
-from enum import Enum
 import random
 import string
 import unittest
 
+from enum import Enum
+
 from jaehasafe import jaehasafe
+from timetrip import dijkstra
 
 
 class TestStringMethods(unittest.TestCase):
@@ -25,6 +27,8 @@ class TestStringMethods(unittest.TestCase):
         result = jaehasafe.get_min_dial_cnt(InputFactory.factory(InputFactory.InputType.fixed))
         self.assertEqual(result, 16)
 
+    def test_dijkstra(self):
+        graph = dijkstra
 
 """
     def test_pi(self):
