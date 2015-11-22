@@ -21,15 +21,24 @@ class Node:
             return False
 
     def add_child(self, node):
-        for i, c in enumerate(self.children):
+        for c in self.children:
             if c.is_child(node):
                 c.add_child(node)
                 return
-            elif node.is_child(c):
-                self.children[i] = node
+        is_added = False
+        del_idxs = []
+        for i, c in enumerate(self.children):
+            if node.is_child(c):
+                if not is_added:
+                    self.children[i] = node
+                    is_added = True
+                else:
+                    del_idxs.append(i)
                 node.add_child(c)
-                return
-        self.children.append(node)
+        for i in del_idxs:
+            del self.children[i]
+        if not is_added:
+            self.children.append(node)
 
 
 class Tree:
