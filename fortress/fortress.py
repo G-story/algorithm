@@ -15,7 +15,8 @@ class Node:
         min_self_x = self.value['x'] - self.value['r']
         max_self_y = self.value['y'] + self.value['r']
         min_self_y = self.value['y'] - self.value['r']
-        if max_node_x - max_self_x <= 0 and min_node_x - min_self_x >= 0 and max_node_y - max_self_y <= 0 and min_node_y - min_self_y >= 0:
+        if max_node_x - max_self_x <= 0 <= min_self_x - min_node_x \
+                and max_node_y - max_self_y <= 0 <= min_self_y - min_node_y:
             return True
         else:
             return False
