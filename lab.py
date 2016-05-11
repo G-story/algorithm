@@ -1,6 +1,5 @@
-from fortress import fortress
+a = [[1, 2], [3, 4]]
 
-tree = fortress.Tree(fortress.Node(1))
-tree.root.add_child(fortress.Node(2))
+b = [n for n in a if n.append(10) is None]
 
-print tree.root.value, tree.root.left.value, tree.root.right
+print(b)
