@@ -1,5 +1,6 @@
-a = [[1, 2], [3, 4]]
+a = [[1, 2], [2, 4], [3, 111]]
+b = [2 * [2], 2 * [2]]
 
-b = [n for n in a if n.append(10) is None]
+b[0][1] = 333
 
-print(b)
+print b
