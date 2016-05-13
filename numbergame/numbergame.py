@@ -11,13 +11,13 @@ class Numbergame:
             return 0
         if end - start == 1:
             return nums[start]
-        if cache[start][end] != 1111:
-            return cache[start][end]
+        if cache[start][end - 1] != 1111:
+            return cache[start][end - 1]
         result = [nums[start] - numbergame(start + 1, end), nums[end - 1] - numbergame(start, end - 1)]
         if end - start >= 2:
             result += [-numbergame(start + 2, end), -numbergame(start, end - 2)]
         ret = max(result)
-        cache[start][end] = ret
+        cache[start][end - 1] = ret
         return ret
 
     @classmethod
