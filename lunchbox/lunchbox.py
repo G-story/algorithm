@@ -4,14 +4,13 @@ class Lunchbox:
 
     @classmethod
     def get_fast_time(cls, m_list, e_list):
-        if len(m_list) == 0 or len(e_list) == 0:
-            return
+        sorted_list = sorted(zip(m_list, e_list), key=lambda a: a[1], reverse=True)
+        stacked_sum_m = 0
         max_time = 0
-        while len(m_list) > 0:
-            min_e_idx, min_e = min(enumerate(e_list), key=lambda p: p[1])
-            max_time = max(max_time, sum(m_list) + min_e)
-            del m_list[min_e_idx]
-            del e_list[min_e_idx]
+        for item in sorted_list:
+            stacked_sum_m += item[0]
+            finish_time = stacked_sum_m + item[1]
+            max_time = finish_time if finish_time > max_time else max_time
 
         return max_time
 
