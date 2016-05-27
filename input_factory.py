@@ -13,7 +13,7 @@ class InputFactory:
     def factory(production_method, input_type, cnt=5, min_val=0, max_val=10):
         if production_method is InputFactory.ProductionMethod.fixed:
             if input_type == int:
-                return [1, 4, 2, 3, 5]
+                return [i for i in range(1, cnt + 1)]
         elif production_method is InputFactory.ProductionMethod.random:
             inputs = []
             if input_type == int:
