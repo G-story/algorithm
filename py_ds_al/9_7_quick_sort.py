@@ -17,14 +17,26 @@ def partition(seq, start, end):
 def quick_sort(seq, start, end):
     p = partition(seq, start, end)
     if start < end:
-        quick_sort(seq, start, p-1)
+        quick_sort(seq, start, p - 1)
         quick_sort(seq, p, end)
     return seq
 
 
+def quick_sort_cache(seq):
+    if len(seq) < 2:
+        return seq
+    ipivot = len(seq) // 2
+    pivot = seq[ipivot]
+
+    before = [x for i, x in enumerate(seq) if x <= pivot and i != ipivot]
+    after = [x for i, x in enumerate(seq) if x > pivot and i != ipivot]
+    return quick_sort_cache(before) + [pivot] + quick_sort_cache(after)
+
+
 def test_quick_sort():
     seq = [3, 5, 2, 6, 8, 1, 0, 3, 5, 6, 2]
-    print(quick_sort(seq, 0, len(seq) - 1))
+    assert (quick_sort(seq, 0, len(seq) - 1) == sorted(seq))
+    assert (quick_sort_cache(seq) == sorted(seq))
     print("테스트 통과!")
 
 
