@@ -28,9 +28,9 @@ def quick_sort_cache(seq):
     ipivot = len(seq) // 2
     pivot = seq[ipivot]
 
-    before = [x for i, x in enumerate(seq) if x <= pivot and i != ipivot]
-    after = [x for i, x in enumerate(seq) if x > pivot and i != ipivot]
-    return quick_sort_cache(before) + [pivot] + quick_sort_cache(after)
+    left = [x for i, x in enumerate(seq) if x <= pivot and i != ipivot]
+    right = [x for i, x in enumerate(seq) if x > pivot and i != ipivot]
+    return quick_sort_cache(left) + [pivot] + quick_sort_cache(right)
 
 
 def test_quick_sort():
