@@ -19,6 +19,5 @@ if __name__ == '__main__':
     c = int(raw_input())
     for i in xrange(c):
         n = int(raw_input())
-        print
-        Lunchbox.get_fast_time([int(inp) for inp in raw_input().split()],
-                               [int(inp) for inp in raw_input().split()])
+        print Lunchbox.get_fast_time([int(inp) for inp in raw_input().split()],
+                                     [int(inp) for inp in raw_input().split()])

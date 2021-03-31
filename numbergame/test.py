@@ -16,5 +16,4 @@ class NumbergameTest(unittest.TestCase):
 
     def test4(self):
         r = Numbergame.work(InputFactory.factory("random", int, 50, -1000, 1000))
-        print
-        r
+        print r

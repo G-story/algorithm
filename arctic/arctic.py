@@ -35,5 +35,4 @@ if __name__ == '__main__':
     c = int(raw_input())
     for i in xrange(c):
         n = int(raw_input())
-        print
-        Arctic.get_min_elec_dist([[float(j) for j in raw_input().split()] for i in xrange(n)])
+        print Arctic.get_min_elec_dist([[float(j) for j in raw_input().split()] for i in xrange(n)])

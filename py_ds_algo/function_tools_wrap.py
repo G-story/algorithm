@@ -6,7 +6,6 @@ def logged(func):
         """with_logging() 함수"""
         print(func.__name__ + " 호출")
         return func(*args, **kwargs)
-
     return with_logging
 
 
@@ -26,7 +25,6 @@ def logged2(func):
     def with_logging(*args, **kwargs):
         print(func.__name__ + " 호출")
         return func(*args, **kwargs)
-
     return with_logging
 
 

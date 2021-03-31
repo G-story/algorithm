@@ -39,8 +39,7 @@ if __name__ == '__main__':
         set_A([int(inp) for inp in raw_input().split()])
         set_B([int(inp) for inp in raw_input().split()])
 
-        print
-        jlis(0, 0)
+        print jlis(0, 0)
 
 
 def lis(a):

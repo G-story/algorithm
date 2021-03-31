@@ -13,5 +13,4 @@ class Josephus(object):
 if __name__ == '__main__':
     c = int(raw_input())
     for i in xrange(c):
-        print
-        ' '.join([str(p) for p in Josephus.get_two_person(*(tuple(int(inp) for inp in raw_input().split())))])
+        print ' '.join([str(p) for p in Josephus.get_two_person(*(tuple(int(inp) for inp in raw_input().split())))])

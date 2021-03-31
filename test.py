@@ -1,8 +1,4 @@
-import random
-import string
 import unittest
-
-from enum import Enum
 
 from jaehasafe import jaehasafe
 from timetrip import dijkstra
@@ -192,30 +188,6 @@ class TestStringMethods(unittest.TestCase):
 
 
 """
-
-
-class InputFactory:
-    class InputType(Enum):
-        fixed = "fixed",
-        random = "random"
-
-    @staticmethod
-    def factory(input_type, cnt=5):
-        if input_type is InputFactory.InputType.fixed:
-            # return ['dog', 'god', 'dragon', 'need']
-            # return ['ab', 'ba', 'cc']
-            # return ['abbab', 'babab', 'ababb', 'bbaba']
-            return ['jaehasafe', 'aehasafej', 'hasafejae', 'afejaehas']
-        elif input_type is InputFactory.InputType.random:
-            input_words = []
-            for i in range(cnt):
-                word = ''
-                while True:
-                    word = ''.join([random.choice(string.ascii_lowercase) for j in range(2)])
-                    if word not in input_words:
-                        break
-                input_words.append(word)
-            return input_words
 
 
 if __name__ == '__main__':

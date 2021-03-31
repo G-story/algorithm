@@ -32,5 +32,4 @@ if __name__ == '__main__':
     c = int(raw_input())
     for i in xrange(c):
         n = int(raw_input())
-        print
-        Numbergame.work([int(inp) for inp in raw_input().split()])
+        print Numbergame.work([int(inp) for inp in raw_input().split()])

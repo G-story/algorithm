@@ -1,6 +1,3 @@
-from fortress import fortress
+a = []
 
-tree = fortress.Tree(fortress.Node(1))
-tree.root.add_child(fortress.Node(2))
-
-print tree.root.value, tree.root.left.value, tree.root.right
+print a.pop()

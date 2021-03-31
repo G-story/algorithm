@@ -21,7 +21,6 @@ def test_longest_inc_subseq():
 
 if __name__ == "__main__":
     from random import randrange
-
     s1 = [randrange(100) for i in range(10000)]
     # s1 = [94, 8, 78, 22, 38, 79, 93, 8, 84, 39]
     print(s1)

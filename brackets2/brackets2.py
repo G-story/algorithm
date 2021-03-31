@@ -16,5 +16,4 @@ class Brackets2(object):
 if __name__ == '__main__':
     c = int(raw_input())
     for i in xrange(c):
-        print
-        Brackets2.get_is_correct(raw_input())
+        print Brackets2.get_is_correct(raw_input())

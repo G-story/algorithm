@@ -1,6 +1,6 @@
-import codecs
 import random
 import sys
+import codecs
 
 t = int(input().strip())
 

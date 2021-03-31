@@ -14,5 +14,4 @@ class LunchboxTest(unittest.TestCase):
     def test3(self):
         a = InputFactory.factory("random", int, 5, 1, 5)
         b = InputFactory.factory("random", int, 5, 1, 5)
-        print
-        a, b, Lunchbox.get_fast_time(a, b)
+        print a, b, Lunchbox.get_fast_time(a, b)
